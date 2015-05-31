@@ -1,0 +1,6 @@
+"AddonInfo"
+{
+	"name" "gcalc"
+	"author_name" "Fearless Captain"
+	"info" "Our server's website is located at http://shittyrp.com/"
+}
