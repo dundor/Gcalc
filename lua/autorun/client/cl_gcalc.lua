@@ -3,19 +3,24 @@
 function DrawCalc()
 	-- print( "DrawCalc ran")
 	local frame = vgui.Create( "DFrame" )
-	frame:Center()
-	-- frame:SetPos( 300, 300 )
+	-- frame:Center()
+	frame:SetPos( (ScrW()/2)-57, (ScrH()/2)-100 )
+	if closed then frame:SetPos( ClosePosX-115, ClosePosY-20 ) end 
 	frame:SetSize( 115, 200 )
 	frame:MakePopup()
 	frame:ShowCloseButton( false )
-	frame:SetTitle( "GCalc v0.02" )
+	frame:SetTitle( "GCalc v0.03" )
 	
 	close_but = vgui.Create( "DButton", frame )
 	close_but:SetPos( 95, 0 )
 	close_but:SetSize( 20, 20 )
 	close_but:SetText( "X" )
 	close_but.DoClick = function()
+		ClosePosX = gui.MouseX()
+		ClosePosY = gui.MouseY()
+		print( ClosePosX, ClosePosY )
 		frame:Close()
+		closed = true
 	end
 
  	local txt_entry = vgui.Create( "DTextEntry", frame )
@@ -170,5 +175,12 @@ function DrawCalc()
 	
 end
 
-print( "cl_gcalc ran" )
-net.Receive( "gcalc", DrawCalc )
+hook.Add( "OnPlayerChat", "CreateKickerCom", function( ply, text, team )
+	if ( string.sub( text, 1, 6 ) == "!gcalc" ) then
+		-- print( "client side" )
+		DrawCalc()
+		return ""
+	end
+end )
+
+-- print( "cl_gcalc ran" )
