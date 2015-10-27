@@ -33,6 +33,7 @@ function DrawCalc()
 	end  
 	
 	-- number buttons
+	local num = 0
 	local memoryplus = 0
 	local memorymin = 0 
 	local memory = 0
@@ -100,19 +101,23 @@ function DrawCalc()
 	mshow_but:SetPos( 10, 55 )
 	mshow_but:SetText( "MR" )
 	mshow_but.DoClick = function()
-		if tonumber( memory ) == 0 then 
-			memory = txt_entry:GetValue()
-			if memory == nil or isstring( memory ) == true then memory = 0 end
+		if tonumber( memory ) == 0 then	 -- set memory value
+			if isnumber( tonumber( txt_entry:GetValue())) == true then
+				memory = tonumber( txt_entry:GetValue() )
+			else
+				memory = 0 
+			end
 			print( "Added " .. memory .. " to memory" )
 		else
-			if memcheck == 1 then -- clear memory
+			if memcheck == 1 then 	-- clear memory
 				print( "Cleared calc memory!" )
 				txt_entry:SetValue( 0 )
+				num = 0
 				memory = 0 
 				memcheck = 0
 				memorymin = 0 
 				memoryplus = 0
-			elseif memcheck == 0 then -- set text to value
+			elseif memcheck == 0 then 	-- set text to value
 				txt_entry:SetValue( memory )
 				memcheck = 1
 			end
@@ -125,15 +130,19 @@ function DrawCalc()
 	mplus_but:SetText( "M+" )
 	mplus_but.DoClick = function()
 		memcheck = 0
+		print( memoryplus .. " memoryplus" )
 		if memoryplus == 0 then 
-			num = txt_entry:GetValue()
-			if num == nil or isstring( num ) == true then num = 0 end
+			if isnumber(tonumber( txt_entry:GetValue() )) == true then
+				num = tonumber( txt_entry:GetValue() )
+			else
+				num = 0 
+			end
 			memoryplus = num
 		else 
 			num = memoryplus
 		end
-
-		if memory == nil or isstring( memory ) == true then memory = 0 end
+		
+		-- if isstring( memory ) == true then memory = 0 end
 		memory = memory + num 
 		txt_entry:SetValue( memory )
 	end
@@ -145,9 +154,12 @@ function DrawCalc()
 	mmin_but.DoClick = function()
 		memcheck = 0
 		if memory != 0 then
-			if memorymin == 0 then 
-				num = txt_entry:GetValue()
-				if num == nil or isstring( num ) == true then num = 0 end
+			if memorymin == 0 then 				
+				if isnumber( tonumber( txt_entry:GetValue())) == true then
+				num = tonumber( txt_entry:GetValue() )
+				else
+					num = 0 
+				end
 				memorymin = num
 			else 
 				num = memorymin
