@@ -164,7 +164,7 @@ function DrawCalc()
 			else 
 				num = memorymin
 			end
-			if memory == nil or isstring( memory ) == true then memory = 0 end
+			-- if memory == nil or isstring( memory ) == true then memory = 0 end
 			memory = memory - num 
 			txt_entry:SetValue( memory )
 		end
@@ -246,7 +246,11 @@ function DrawCalc()
 	negpos_but.DoClick = function()
 		memcheck = 0
 		num = txt_entry:GetValue()
-		if num == nil or isstring( num ) == true then num = 0 end
+		if isnumber( tonumber( txt_entry:GetValue())) == true then
+			num = tonumber( txt_entry:GetValue() )
+		else
+			num = 0 
+		end
 		txt_entry:SetValue( num * -1 )
 	end
 	
