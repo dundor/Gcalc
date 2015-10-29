@@ -1,7 +1,8 @@
 // lua/autorun/client/cl_gcalc.lua 
 
 function DrawCalc()
-	
+	-- local ClosePosX = gui.MouseX()
+	-- local ClosePosY = gui.MouseY()
 	-- print( "DrawCalc ran")
 	local frame = vgui.Create( "DFrame" )
 	-- frame:Center()
