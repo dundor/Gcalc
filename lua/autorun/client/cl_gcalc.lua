@@ -1,17 +1,27 @@
 // lua/autorun/client/cl_gcalc.lua 
 
+-- ClosePosX = (ScrH()/2)-100
+-- ClosePosY = (ScrW()/2)-57
+
 function DrawCalc()
-	-- local ClosePosX = gui.MouseX()
-	-- local ClosePosY = gui.MouseY()
+
+	-- local ClosePosX = gui.MouseX() -100
+	-- local ClosePosY = gui.MouseY() -57
 	-- print( "DrawCalc ran")
+	
 	local frame = vgui.Create( "DFrame" )
-	-- frame:Center()
-	frame:SetPos( (ScrW()/2)-57, (ScrH()/2)-100 )
-	if closed then frame:SetPos( ClosePosX-115, ClosePosY-20 ) end 
-	frame:SetSize( 115, 215 )
+	frame:Center()
+	-- frame:SetPos( (ScrW()/2)-57, (ScrH()/2)-100 )
+	if closed then frame:SetPos( ClosePosX - 110, ClosePosY - 5 ) end 
+	frame:SetSize( 115, 245 )
 	frame:MakePopup()
 	frame:ShowCloseButton( false )
-	frame:SetTitle( "GCalc v0.04" )
+	frame:SetTitle( "GCalc v0.05" )
+	
+	local label = vgui.Create( "DLabel", frame )
+	label:SetPos( 10, 227 )
+	label:SetText( "2015 CaptainFaggot" )
+	label:SizeToContents()
 	
 	local close_but = vgui.Create( "DButton", frame )
 	close_but:SetPos( 95, 0 )
@@ -44,7 +54,7 @@ function DrawCalc()
 	local value2 = 0
 	local value1 = 0
 	local posx = 10
-	local posy = 155
+	local posy = 180
 	txt_entry:SetValue( "0" )
 	for i = 1, 9 do
 		-- print( "Building button " .. i )
@@ -70,15 +80,15 @@ function DrawCalc()
 		end
 		
 		if i == 3 then 
-			posy = 130
+			posy = 155
 		elseif i == 6 then
-			posy = 105
+			posy = 130
 		end
 	end
 	
 	local zero_but = vgui.Create( "DButton", frame )
 	zero_but:SetSize( 45, 20 )
-	zero_but:SetPos( 10, 180 )
+	zero_but:SetPos( 10, 205 )
 	zero_but:SetText( 0 )
 	zero_but.DoClick = function()
 		memcheck = 0
@@ -171,10 +181,51 @@ function DrawCalc()
 		end
 	end
 	
+	// special function buttons now with more filler 
+	
+	local pi_but = vgui.Create( "DButton", frame )
+	pi_but:SetSize( 20, 20 )
+	pi_but:SetPos( 60, 80 )
+	pi_but:SetText( "Pi" )
+	pi_but.DoClick = function()
+		memcheck = 0
+		-- operation = "+"
+		value1 = txt_entry:GetFloat()
+		txt_entry:SetValue( math.pi )
+	end
+	
+	local rad_but = vgui.Create( "DButton", frame )
+	rad_but:SetSize( 20, 20 )
+	rad_but:SetPos( 85, 80 )
+	rad_but:SetText( "√" )
+	rad_but.DoClick = function()
+		if check == 1 then check = 0 txt_entry:SetValue( 0 ) end
+		memcheck = 0
+		value1 = txt_entry:GetFloat()
+		txt_entry:SetValue( math.sqrt( value1 ) )
+		check = 1
+	end
+	
+	local exp_but = vgui.Create( "DButton", frame )
+	exp_but:SetSize( 20, 20 )
+	exp_but:SetPos( 10, 105 )
+	exp_but:SetText( "^" )
+	exp_but.DoClick = function()
+		memcheck = 0
+		operation = "^"
+		value1 = txt_entry:GetFloat()
+		txt_entry:SetValue( 0 )
+	end
+	
+	
+	
+	
+	
+	
 	
 	// function buttons
 	local clear_but = vgui.Create( "DButton", frame )
-	clear_but:SetSize( 20, 20 )
+	clear_but:SetSize( 45, 20 )
 	clear_but:SetPos( 10, 80 )
 	clear_but:SetText( "C" )
 	clear_but.DoClick = function()
@@ -188,7 +239,7 @@ function DrawCalc()
 	
 	local plus_but = vgui.Create( "DButton", frame )
 	plus_but:SetSize( 20, 45 )
-	plus_but:SetPos( 85, 105 )
+	plus_but:SetPos( 85, 130 )
 	plus_but:SetText( "+" )
 	plus_but.DoClick = function()
 		memcheck = 0
@@ -199,7 +250,7 @@ function DrawCalc()
 	
 	local sub_but = vgui.Create( "DButton", frame )
 	sub_but:SetSize( 20, 20 )
-	sub_but:SetPos( 85, 80 )
+	sub_but:SetPos( 85, 105 )
 	sub_but:SetText( "-" )
 	sub_but.DoClick = function()
 		memcheck = 0
@@ -210,8 +261,8 @@ function DrawCalc()
 	
 	local div_but = vgui.Create( "DButton", frame )
 	div_but:SetSize( 20, 20 )
-	div_but:SetPos( 35, 80 )
-	div_but:SetText( "/" )
+	div_but:SetPos( 35, 105 )
+	div_but:SetText( "÷" )
 	div_but.DoClick = function()
 		memcheck = 0
 		operation = "/"
@@ -221,7 +272,7 @@ function DrawCalc()
 	
 	local multi_but = vgui.Create( "DButton", frame )
 	multi_but:SetSize( 20, 20 )
-	multi_but:SetPos( 60, 80 )
+	multi_but:SetPos( 60, 105 )
 	multi_but:SetText( "x" )
 	multi_but.DoClick = function()
 		memcheck = 0
@@ -232,7 +283,7 @@ function DrawCalc()
 	
 	local dot_but = vgui.Create( "DButton", frame )
 	dot_but:SetSize( 20, 20 )
-	dot_but:SetPos( 60, 180 )
+	dot_but:SetPos( 60, 205 )
 	dot_but:SetText( "." )
 	dot_but.DoClick = function()
 		memcheck = 0
@@ -257,7 +308,7 @@ function DrawCalc()
 	
 	local equal_but = vgui.Create( "DButton", frame )
 	equal_but:SetSize( 20, 45 )
-	equal_but:SetPos( 85, 155 )
+	equal_but:SetPos( 85, 180 )
 	equal_but:SetText( "=" )
 	equal_but.DoClick = function()
 		memcheck = 0
@@ -276,6 +327,8 @@ function DrawCalc()
 			txt_entry:SetValue( tonumber( value1 ) / tonumber( value2 ) )
 		elseif operation == "*" then
 			txt_entry:SetValue( tonumber( value1 ) * tonumber( value2 ) )
+		elseif operation == "^" then
+			txt_entry:SetValue( math.pow( tonumber( value1 ), tonumber( value2 ) ) )
 		else
 			txt_entry:SetValue( 0 )
 		end
@@ -285,7 +338,7 @@ function DrawCalc()
 end
 
 hook.Add( "OnPlayerChat", "CreateKickerCom", function( ply, text, team )
-	if ( string.sub( text, 1, 6 ) == "!gcalc" ) then
+	if LocalPlayer() == ply and ( string.sub( text, 1, 6 ) == "!gcalc" ) then
 		-- print( "client side" )
 		DrawCalc()
 		return ""
