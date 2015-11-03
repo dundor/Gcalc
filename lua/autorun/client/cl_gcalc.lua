@@ -279,12 +279,11 @@ function DrawCalc()
 	
 end
 
-hook.Add( "OnPlayerChat", "CreateKickerCom", function( ply, text, team )
-	if ( string.sub( text, 1, 6 ) == "!gcalc" ) then
+hook.Add( "OnPlayerChat", "CreateGCalc", function( ply, text, team )
+	if ply == LocalPlayer() and text:lower():match("!gcalc$") then
 		-- print( "client side" )
 		DrawCalc()
 		return ""
 	end
 end )
 
--- print( "cl_gcalc ran" )
