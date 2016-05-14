@@ -3,7 +3,9 @@
 -- ClosePosX = (ScrH()/2)-100
 -- ClosePosY = (ScrW()/2)-57
 
-function DrawCalc()
+
+
+local function DrawCalc()
 
 	-- local ClosePosX = gui.MouseX() -100
 	-- local ClosePosY = gui.MouseY() -57
@@ -16,11 +18,12 @@ function DrawCalc()
 	frame:SetSize( 115, 245 )
 	frame:MakePopup()
 	frame:ShowCloseButton( false )
-	frame:SetTitle( "GCalc v0.05" )
+	frame:SetTitle( "GCalc v0.06" )
+	
 	
 	local label = vgui.Create( "DLabel", frame )
-	label:SetPos( 10, 227 )
-	label:SetText( "2015 CaptainFaggot" )
+	label:SetPos( 6, 227 )
+	label:SetText( "2016 FearlessCaptain" )
 	label:SizeToContents()
 	
 	local close_but = vgui.Create( "DButton", frame )
@@ -141,18 +144,20 @@ function DrawCalc()
 	mplus_but:SetText( "M+" )
 	mplus_but.DoClick = function()
 		memcheck = 0
-		print( memoryplus .. " memoryplus" )
-		if memoryplus == 0 then 
-			if isnumber(tonumber( txt_entry:GetValue() )) == true then
-				num = tonumber( txt_entry:GetValue() )
-			else
-				num = 0 
+		if txt_entry:GetValue() == 0 or txt_entry:GetValue() == "0" then
+		//pass
+		else
+			if memoryplus == 0 then 
+				if isnumber(tonumber( txt_entry:GetValue() )) == true then
+					num = tonumber( txt_entry:GetValue() )
+				else
+					num = 0 
+				end
+				memoryplus = num
+			else 
+				num = memoryplus
 			end
-			memoryplus = num
-		else 
-			num = memoryplus
 		end
-		
 		-- if isstring( memory ) == true then memory = 0 end
 		memory = memory + num 
 		txt_entry:SetValue( memory )
@@ -164,10 +169,12 @@ function DrawCalc()
 	mmin_but:SetText( "M-" )
 	mmin_but.DoClick = function()
 		memcheck = 0
-		if memory != 0 then
-			if memorymin == 0 then 				
-				if isnumber( tonumber( txt_entry:GetValue())) == true then
-				num = tonumber( txt_entry:GetValue() )
+		if txt_entry:GetValue() == 0 or txt_entry:GetValue() == "0" then
+		//pass
+		else
+			if memorymin == 0 then 
+				if isnumber(tonumber( txt_entry:GetValue() )) == true then
+					num = tonumber( txt_entry:GetValue() )
 				else
 					num = 0 
 				end
@@ -175,24 +182,16 @@ function DrawCalc()
 			else 
 				num = memorymin
 			end
-			-- if memory == nil or isstring( memory ) == true then memory = 0 end
-			memory = memory - num 
-			txt_entry:SetValue( memory )
 		end
+		
+		memory = memory - num 
+		txt_entry:SetValue( memory )
+		-- end
 	end
 	
 	// special function buttons now with more filler 
 	
-	local pi_but = vgui.Create( "DButton", frame )
-	pi_but:SetSize( 20, 20 )
-	pi_but:SetPos( 60, 80 )
-	pi_but:SetText( "Pi" )
-	pi_but.DoClick = function()
-		memcheck = 0
-		-- operation = "+"
-		value1 = txt_entry:GetFloat()
-		txt_entry:SetValue( math.pi )
-	end
+	
 	
 	local rad_but = vgui.Create( "DButton", frame )
 	rad_but:SetSize( 20, 20 )
@@ -230,6 +229,8 @@ function DrawCalc()
 	clear_but:SetText( "C" )
 	clear_but.DoClick = function()
 		memcheck = 0
+		memorymin = 0 
+		memoryplus = 0
 		value = 0
 		operation = ""
 		value1 = 0
@@ -277,6 +278,18 @@ function DrawCalc()
 	multi_but.DoClick = function()
 		memcheck = 0
 		operation = "*"
+		value1 = txt_entry:GetFloat()
+		txt_entry:SetValue( 0 )
+	end
+	
+	// this used to be the pi button but I thought that a % function would be more useful.
+	local pi_but = vgui.Create( "DButton", frame )
+	pi_but:SetSize( 20, 20 )
+	pi_but:SetPos( 60, 80 )
+	pi_but:SetText( "%" )
+	pi_but.DoClick = function()
+		memcheck = 0
+		operation = "%"
 		value1 = txt_entry:GetFloat()
 		txt_entry:SetValue( 0 )
 	end
@@ -329,8 +342,11 @@ function DrawCalc()
 			txt_entry:SetValue( tonumber( value1 ) * tonumber( value2 ) )
 		elseif operation == "^" then
 			txt_entry:SetValue( math.pow( tonumber( value1 ), tonumber( value2 ) ) )
+		elseif operation == "%" then
+			txt_entry:SetValue( ( tonumber( value2 ) / 100 ) * tonumber( value1 ) )
 		else
 			txt_entry:SetValue( 0 )
+
 		end
 		check = 1
 	end
@@ -338,10 +354,58 @@ function DrawCalc()
 end
 
 
+
+
+local function GCalcHelp()
+
+	
+	local frame = vgui.Create( "DFrame" )
+	frame:Center()
+	-- frame:SetPos( (ScrW()/2)-57, (ScrH()/2)-100 )
+	if closed then frame:SetPos( ClosePosX - 110, ClosePosY - 5 ) end 
+	frame:SetSize( 200, 245 )
+	frame:MakePopup()
+	frame:ShowCloseButton( false )
+	frame:SetTitle( "GCalc Help" )
+	
+	local label = vgui.Create( "DLabel", frame )
+	label:SetPos( 10, 35 )
+	label:SetText( "You can't use a calculator? What did\nthey teach you in school? Type into\nGoogle, 'how to use a calculator' and\nyou will find the help you need there.\n\nThe only thing that might be different\nis the Percentage function. It works\na little easier then on a regular calcu-\nlator but those are dumb anyway. For\nthis calculator enter the number you\nwant a percentage of, eg. 395 then\nhit '%' and then enter what percen-\ntage of it you want, like 7. Then hit\nenter and there you are. 7% of 395." )
+	label:SizeToContents() 
+	
+	local label = vgui.Create( "DLabel", frame )
+	label:SetPos( 62, 227 )
+	label:SetText( "Steam Edition!" )
+	label:SetTextColor( Color( 146, 146, 146, 255 ) )
+	label:SizeToContents()
+	
+	local close_but = vgui.Create( "DButton", frame )
+	close_but:SetPos( 180, 0 )
+	close_but:SetSize( 20, 20 )
+	close_but:SetText( "X" )
+	close_but.DoClick = function()
+		ClosePosX = gui.MouseX()
+		ClosePosY = gui.MouseY()
+		-- print( ClosePosX, ClosePosY )
+		frame:Close()
+		closed = true
+	end
+
+end
+
+// This is a nice way to make client side chat commands. They have low overhead
+// and are easy to copypaste because you don't have to count ant characters.
+
 hook.Add( "OnPlayerChat", "CreateGCalc", function( ply, text, team )
 	if ply == LocalPlayer() and text:lower():match("!gcalc$") then
-		-- print( "client side" )
 		DrawCalc()
+		return ""
+	end
+end )
+
+hook.Add( "OnPlayerChat", "CreateGCalcHelp", function( ply, text, team )
+	if ply == LocalPlayer() and text:lower():match("!gcalchelp$") then
+		GCalcHelp()
 		return ""
 	end
 end )
