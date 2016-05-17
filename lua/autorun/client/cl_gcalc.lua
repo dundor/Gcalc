@@ -11,19 +11,34 @@ function DrawCalc()
 	frame:MakePopup()
 	frame:ShowCloseButton( false )
 	frame:SetTitle( "GCalc v0.04" )
+	frame.Paint = function()
+		draw.RoundedBox(2, 0, 0, frame:GetWide(), frame:GetTall(), Color(20, 20, 20, 250))
+		draw.RoundedBox(2, 0, 0, frame:GetWide(), 25, Color(40, 40, 40, 255))
+	end
 	
-	local close_but = vgui.Create( "DButton", frame )
-	close_but:SetPos( 95, 0 )
-	close_but:SetSize( 20, 20 )
-	close_but:SetText( "X" )
-	close_but.DoClick = function()
+	local frameclose = vgui.Create("DButton", frame)
+	frameclose:SetPos( 95, 0 )
+	frameclose:SetSize( 20, 20 )
+	frameclose:SetText("X")
+	frameclose:SetTextColor(Color(0,0,0,255))
+	frameclose.hover = false
+	frameclose.DoClick = function()
 		ClosePosX = gui.MouseX()
 		ClosePosY = gui.MouseY()
 		-- print( ClosePosX, ClosePosY )
 		frame:Close()
-		closed = true
+		closed = true	end
+	frameclose.OnCursorEntered = function(self)
+		self.hover = true
 	end
-
+	frameclose.OnCursorExited = function(self)
+		self.hover = false
+	end
+	function frameclose:Paint(w, h)	
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(255,15,15,250)) or Color(255,255,255,255)) -- Paints on hover
+		frameclose:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end	
+	
  	local txt_entry = vgui.Create( "DTextEntry", frame )
 	txt_entry:SetSize( 95, 20 )
 	txt_entry:SetPos( 10, 30 )
@@ -62,6 +77,16 @@ function DrawCalc()
 			end
 			-- print( "value 2 " .. value )
 		end
+		calc_but.OnCursorEntered = function(self)
+			self.hover = true
+		end
+		calc_but.OnCursorExited = function(self)
+			self.hover = false
+		end	
+		calc_but.Paint = function( self, w, h )		
+			draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+			calc_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+		end		
 		
 		posx = posx + 25
 		if posx > 75 then
@@ -92,6 +117,16 @@ function DrawCalc()
 			txt_entry:SetValue( num .. 0 )
 		end
 	end
+	zero_but.OnCursorEntered = function(self)
+		self.hover = true
+	end
+	zero_but.OnCursorExited = function(self)
+		self.hover = false
+	end	
+	zero_but.Paint = function( self, w, h )		
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+		zero_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end	
 	
 	
 	-- memory function buttons 
@@ -123,6 +158,16 @@ function DrawCalc()
 			end
 		end
 	end
+	mshow_but.OnCursorEntered = function(self)
+		self.hover = true
+	end
+	mshow_but.OnCursorExited = function(self)
+		self.hover = false
+	end	
+	mshow_but.Paint = function( self, w, h )		
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+		mshow_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end	
 	
 	local mplus_but = vgui.Create( "DButton", frame )
 	mplus_but:SetSize( 20, 20 )
@@ -146,6 +191,16 @@ function DrawCalc()
 		memory = memory + num 
 		txt_entry:SetValue( memory )
 	end
+	mplus_but.OnCursorEntered = function(self)
+		self.hover = true
+	end
+	mplus_but.OnCursorExited = function(self)
+		self.hover = false
+	end	
+	mplus_but.Paint = function( self, w, h )		
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+		mplus_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end	
 	
 	local mmin_but = vgui.Create( "DButton", frame )
 	mmin_but:SetSize( 20, 20 )
@@ -169,7 +224,16 @@ function DrawCalc()
 			txt_entry:SetValue( memory )
 		end
 	end
-	
+	mmin_but.OnCursorEntered = function(self)
+		self.hover = true
+	end
+	mmin_but.OnCursorExited = function(self)
+		self.hover = false
+	end	
+	mmin_but.Paint = function( self, w, h )		
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+		mmin_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end		
 	
 	// function buttons
 	local clear_but = vgui.Create( "DButton", frame )
@@ -184,6 +248,16 @@ function DrawCalc()
 		value2 = 0 
 		txt_entry:SetValue( 0 )
 	end
+	clear_but.OnCursorEntered = function(self)
+		self.hover = true
+	end
+	clear_but.OnCursorExited = function(self)
+		self.hover = false
+	end	
+	clear_but.Paint = function( self, w, h )		
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+		clear_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end	
 	
 	local plus_but = vgui.Create( "DButton", frame )
 	plus_but:SetSize( 20, 45 )
@@ -195,6 +269,16 @@ function DrawCalc()
 		value1 = txt_entry:GetFloat()
 		txt_entry:SetValue( 0 )
 	end
+	plus_but.OnCursorEntered = function(self)
+		self.hover = true
+	end
+	plus_but.OnCursorExited = function(self)
+		self.hover = false
+	end	
+	plus_but.Paint = function( self, w, h )		
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+		plus_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end	
 	
 	local sub_but = vgui.Create( "DButton", frame )
 	sub_but:SetSize( 20, 20 )
@@ -206,6 +290,16 @@ function DrawCalc()
 		value1 = txt_entry:GetFloat()
 		txt_entry:SetValue( 0 )
 	end
+	sub_but.OnCursorEntered = function(self)
+		self.hover = true
+	end
+	sub_but.OnCursorExited = function(self)
+		self.hover = false
+	end	
+	sub_but.Paint = function( self, w, h )		
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+		sub_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end	
 	
 	local div_but = vgui.Create( "DButton", frame )
 	div_but:SetSize( 20, 20 )
@@ -217,6 +311,16 @@ function DrawCalc()
 		value1 = txt_entry:GetFloat()
 		txt_entry:SetValue( 0 )
 	end
+	div_but.OnCursorEntered = function(self)
+		self.hover = true
+	end
+	div_but.OnCursorExited = function(self)
+		self.hover = false
+	end	
+	div_but.Paint = function( self, w, h )		
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+		div_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end	
 	
 	local multi_but = vgui.Create( "DButton", frame )
 	multi_but:SetSize( 20, 20 )
@@ -228,6 +332,16 @@ function DrawCalc()
 		value1 = txt_entry:GetFloat()
 		txt_entry:SetValue( 0 )
 	end
+	multi_but.OnCursorEntered = function(self)
+		self.hover = true
+	end
+	multi_but.OnCursorExited = function(self)
+		self.hover = false
+	end	
+	multi_but.Paint = function( self, w, h )		
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+		multi_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end	
 	
 	local dot_but = vgui.Create( "DButton", frame )
 	dot_but:SetSize( 20, 20 )
@@ -238,6 +352,16 @@ function DrawCalc()
 		num = txt_entry:GetValue()
 		txt_entry:SetValue( num .. "." )
 	end
+	dot_but.OnCursorEntered = function(self)
+		self.hover = true
+	end
+	dot_but.OnCursorExited = function(self)
+		self.hover = false
+	end	
+	dot_but.Paint = function( self, w, h )		
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+		dot_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end	
 	
 	local negpos_but = vgui.Create( "DButton", frame )
 	negpos_but:SetSize( 20, 20 )
@@ -249,6 +373,16 @@ function DrawCalc()
 		if num == nil or isstring( num ) == true then num = 0 end
 		txt_entry:SetValue( num * -1 )
 	end
+	negpos_but.OnCursorEntered = function(self)
+		self.hover = true
+	end
+	negpos_but.OnCursorExited = function(self)
+		self.hover = false
+	end	
+	negpos_but.Paint = function( self, w, h )		
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+		negpos_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end	
 	
 	local equal_but = vgui.Create( "DButton", frame )
 	equal_but:SetSize( 20, 45 )
@@ -276,6 +410,16 @@ function DrawCalc()
 		end
 		check = 1
 	end
+	equal_but.OnCursorEntered = function(self)
+		self.hover = true
+	end
+	equal_but.OnCursorExited = function(self)
+		self.hover = false
+	end	
+	equal_but.Paint = function( self, w, h )		
+		draw.RoundedBox(0, 0, 0, w, h, (self.hover and Color(0,160,255,250)) or Color(255,255,255,255)) -- Paints on hover
+		equal_but:SetTextColor(self.hover and Color(255,255,255,250) or Color(0,0,0,255))
+	end	
 	
 end
 
